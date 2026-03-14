@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Location</title>
+</head>
+
+<body>
+
+<h2>Share GPS Location (Aditya Gupta 2023BCS0125)</h2>
+
+<button onclick="getLocation()">Share Location</button>
+
+<p id="status"></p>
+<p id="coords"></p>
+
+<script>
+
+function getLocation(){
+
+    if(navigator.geolocation){
+
+        navigator.geolocation.getCurrentPosition(function(position){
+
+            const latitude = position.coords.latitude;
+            const longitude = position.coords.longitude;
+
+            const data = {
+                latitude: latitude,
+                longitude: longitude
+            };
+
+            fetch("/location",{
+                method:"POST",
+                headers:{
+                    "Content-Type":"application/json"
+                },
+                body:JSON.stringify(data)
+            })
+            .then(res => res.json())
+            .then(response => {
+
+                document.getElementById("status").innerText =
+                "Location shared to Aditya Gupta 2023BCS0125 successfully";
+
+                document.getElementById("coords").innerText =
+                "Latitude: " + latitude + " | Longitude: " + longitude;
+
+            });
+
+        });
+
+    }else{
+        alert("Geolocation not supported");
+    }
+
+}
+
+</script>
+
+</body>
+</html>
